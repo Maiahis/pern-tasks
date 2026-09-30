@@ -4,6 +4,8 @@ CREATE TABLE task (
     description TEXT    
 );
 
+ALTER TABLE task ADD COLUMN user_id INT REFERENCES users(id);
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255) NOT NULL,

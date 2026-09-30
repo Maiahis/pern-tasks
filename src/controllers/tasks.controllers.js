@@ -1,11 +1,12 @@
 import { pool } from '../db.js';
 
 export const getAllTasks = async (req, res, next) => {
+    console.log(req.userID);
      const result = await pool.query('SELECT * FROM task');
      return res.json(result.rows);
 };
 
-export const getTask = async (req, res, next) => {
+export const getTask = async (req, res) => {
     const result = await pool.query('SELECT * FROM task WHERE id = $1', [req.params.id]);
     if (result.rows.length === 0) {
         return res.status(404).json({ message: 'Tarea no encontrada' });
