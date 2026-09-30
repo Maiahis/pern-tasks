@@ -1,4 +1,4 @@
-import {Router} from "express";
+import Router from "express-promise-router";
 import { signin, signup, signout, getProfile } from "../controllers/auth.controllers.js";
 
 const router = Router();
