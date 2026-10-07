@@ -1,6 +1,7 @@
 import bcrypyt from "bcrypt";
 import { pool } from "../db.js";
 import { createAccessToken } from "../libs/jwt.js";
+import md5 from "md5";
 
 export const signin = async(req, res) => {
    const { email, password } = req.body;
@@ -34,18 +35,17 @@ export const signin = async(req, res) => {
 
 export const signup =async (req, res, next) => {
   const { username, password, email } = req.body;  
-  console.log(username,password,email);
-
+  
   try {
     const hashedPassword = await bcrypyt.hash(password, 10);
-   
+    const gravatar = `https://www.gravatar.com/avatar/${md5(email)}`;   
       
     const result = await pool.query(
-    "INSERT INTO users (username, password, email) VALUES ($1, $2, $3) RETURNING *",
-    [username, hashedPassword, email]
+    "INSERT INTO users (username, password, email, gravatar) VALUES ($1, $2, $3, $4) RETURNING *",
+    [username, hashedPassword, email, gravatar]
    );
 
-   const token = await createAccessToken({ id: result.rows[0].id, username: result.rows[0].username });
+   const token = await createAccessToken({ id: result.rows[0].id });
 
    res.cookie('token', token, {
     httpOnly: true,
@@ -61,6 +61,7 @@ export const signup =async (req, res, next) => {
    if (error.code === "23505") {
     return res.status(400).json({ message: "El correo electrónico ya está en uso." });
    }
+
    next(error);
  }
 };
@@ -70,7 +71,7 @@ export const signout = (req, res) =>{
     res.sendStatus(200);
 };
 
-export const getProfile = async (req, res) => {
-  const result = await pool.query("SELECT * FROM users WHERE id = $1", [req.userID]);
+export const profile = async (req, res) => {
+  const result = await pool.query("SELECT * FROM users WHERE id = $1", [req.userId]);
   return res.json(result.rows[0]);
 };

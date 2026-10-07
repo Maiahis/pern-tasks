@@ -1,9 +1,8 @@
 import { pool } from '../db.js';
 
 export const getAllTasks = async (req, res, next) => {
-    console.log(req.userID);
-     const result = await pool.query('SELECT * FROM task');
-     return res.json(result.rows);
+    const result = await pool.query('SELECT * FROM task WHERE user_id = $1', [req.userId]);
+    return res.json(result.rows);
 };
 
 export const getTask = async (req, res) => {
@@ -19,8 +18,8 @@ export const createTask = async (req, res, next) => {
     
     // Db insert
    try {
-    const result = await pool.query('INSERT INTO task (title, description) VALUES ($1, $2) RETURNING *' ,
-    [title, description]);
+    const result = await pool.query('INSERT INTO task (title, description, user_id) VALUES ($1, $2, $3) RETURNING *' ,
+    [title, description, req.userId]);
     res.json(result.rows[0]);
     } catch (error) {
     if (error.code === '23505') {
