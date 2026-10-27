@@ -3,15 +3,16 @@ import { pool } from "../db.js";
 import { createAccessToken } from "../libs/jwt.js";
 import md5 from "md5";
 
-export const signin = async(req, res) => {
-   const { email, password } = req.body;
+export const signin = async (req, res) => {
+  const { email, password } = req.body;
 
-   const result = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+  const result = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
 
-   if (result.rows.length === 0) {
-    return res.status(404).json({
-    message: "Usuario no encontrado" });
-   }
+  if (result.rowCount === 0) {
+    return res.status(400).json({
+      message: "El correo no esta registrado"
+    });
+  }
 
    const validPassword = await bcrypyt.compare(password, result.rows[0].password);
 
@@ -24,8 +25,8 @@ export const signin = async(req, res) => {
    const token = await createAccessToken({ id: result.rows[0].id, username: result.rows[0].username });
 
    res.cookie('token', token, {
-    httpOnly: true,
-    // secure: true,
+    // httpOnly: true,
+    //secure: true,
     sameSite: 'none',
     maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
@@ -48,8 +49,8 @@ export const signup =async (req, res, next) => {
    const token = await createAccessToken({ id: result.rows[0].id });
 
    res.cookie('token', token, {
-    httpOnly: true,
-    // secure: true,
+    // httpOnly: true,
+    //secure: true,
     sameSite: 'none',
     maxAge: 24 * 60 * 60 * 1000, // 1 day
     });   
@@ -59,7 +60,9 @@ export const signup =async (req, res, next) => {
 
    } catch (error) {
    if (error.code === "23505") {
-    return res.status(400).json({ message: "El correo electrónico ya está en uso." });
+    return res.status(400).json({
+    message: "El correo electrónico ya está en uso."
+    });
    }
 
    next(error);

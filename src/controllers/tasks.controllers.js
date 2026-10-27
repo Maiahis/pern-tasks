@@ -25,7 +25,7 @@ export const createTask = async (req, res, next) => {
     if (error.code === '23505') {
         return res.status(409).json({ error: 'La tarea ya existe' });
     }
-    next(error)
+    next(error);
    }
 };
 
