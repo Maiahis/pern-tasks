@@ -1,4 +1,4 @@
-import { Button, Card, Input, Label } from "../components/ui/";
+import { Button, Card, Input, Label, Container } from "../components/ui/";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
@@ -18,7 +18,7 @@ function LoginPage() {
   });
 
   return (
-    <div className="h-[calc(100vh-64px)] flex justify-center items-center">
+    <Container className="h-[calc(100vh-10rem)] flex justify-center items-center">
       <Card>
 
       { 
@@ -53,7 +53,7 @@ function LoginPage() {
           </div>
         </form>
       </Card>
-    </div>
+    </Container>
   );
 }
 
