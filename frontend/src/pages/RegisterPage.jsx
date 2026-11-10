@@ -15,13 +15,11 @@ function RegisterPage() {
 
   const onSubmit = handleSubmit(async (data) => {
    const user = await signup(data);
-     if(user) {
-       navigate("/profile");
-     }    
-  });
+     if(user) navigate("/tasks");
+     });
 
   return (
-    <Container  className= "h-[calc(100vh-10rem)] flex justify-center items-center">    
+    <Container className= "h-[calc(100vh-7rem)] flex items-center justify-center">    
       <Card>
   
        { 
@@ -44,19 +42,23 @@ function RegisterPage() {
         <Input type="email" placeholder="Ingrese su email"
         {...register('email', { required: true })} 
         />
-        { errors.email && <p className="text-red-500">El email es requerido</p>}
+        { errors.email && (
+          <p className="text-red-500">El email es requerido</p>
+        )}
         
         <Label htmlFor="password">Contraseña</Label>
         <Input type="password" placeholder="Ingrese su contraseña"
         {...register('password', { required: true })}
         />
-        { errors.password && <p className="text-red-500">La contraseña es requerida</p>}
+        { errors.password && (
+          <p className="text-red-500">La contraseña es requerida</p>
+        )}
         
 
         <Button>Register</Button>
 
          <div className="flex justify-between my-4">
-            <p> Ya tienes cuenta?</p>
+            <p className="mr-4"> Ya tienes cuenta?</p>
             <Link to="/login" className="font-bold">
               Sign in
             </Link>
