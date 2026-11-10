@@ -1,0 +1,1 @@
+PERN Tasks es una robusta aplicación de gestión de tareas desarrollada con el stack tecnológico PERN, que integra PostgreSQL, Express, React y Node.js. Esta aplicación web ofrece una interfaz intuitiva para crear, gestionar y organizar tareas.
